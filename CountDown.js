@@ -3,14 +3,20 @@ import {Text, View} from 'react-native';
 
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { Ionicons } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 class CountDown extends React.Component{
     constructor(props){
         super(props);
-        this.state = { time: {}, seconds: this.props.seconds, isPaused: this.props.isPaused };
+        this.state = {
+            time: {}, 
+            seconds: this.props.seconds, 
+            isPaused: this.props.isPaused
+        }
         this.timer = 0;
         this.startTimer = this.startTimer.bind(this);
         this.countDown = this.countDown.bind(this);
+        //this.togglePause = this.props.togglePause.bind(this);
     }
 
     secondsToTime(secs){
@@ -63,53 +69,68 @@ class CountDown extends React.Component{
           clearInterval(this.timer);
         }
       }
+    
+    togglePause = () => {
+        this.setState({isPaused: !this.state.isPaused});
+        console.log("cddeki "+this.state.isPaused);
+        this.props.togglePause();
+    }
 
     render(){
         let leftTime = this.secondsToTime(this.state.seconds);
-        let yuzde = 100 * this.state.seconds / this.props.seconds;
-        console.log(this.state.seconds);
-        console.log(this.props.seconds);
+        let _percent = 100 * this.state.seconds / this.props.seconds;
+        if(_percent <= 0){
+            _percent = 100;
+        }
         
+    
         if(this.props.isPaused){
             return (
                 <View>
-            <AnimatedCircularProgress
-            size={55}
-            width={2}
-            fill={yuzde}
-            tintColor="#00e0ff"
-            onAnimationComplete={() => console.log('onAnimationComplete')}
-            backgroundColor="#3d5875">
-                {
-                    (fill) => (
-                        <Text 
-                            style={{color: 'white', fontWeight: 'bold'}}>
-                                <Ionicons name="pause" size={32} />
-                        </Text>
-                    )
-                }
-        </AnimatedCircularProgress>
+                    <TouchableOpacity onPress={() => this.togglePause()}>
+                        <AnimatedCircularProgress
+                            size={55}
+                            width={2}
+                            fill={_percent}
+                            tintColor="#00e0ff"
+                            backgroundColor="#3d5875">
+                                {
+                                    (fill) => (
+                                        <Text 
+                                            style={{color: 'white', fontWeight: 'bold'}}>
+                                                <Ionicons name="pause" size={32} />
+                                        </Text>
+                                    )
+                                }
+                        </AnimatedCircularProgress>
+                    </TouchableOpacity>
         </View>
             )
+        }else{
+            return (
+                <View>
+                    <TouchableOpacity onPress={() => this.togglePause()}>
+                        <AnimatedCircularProgress
+                            size={55}
+                            width={2}
+                            fill={_percent}
+                            tintColor="#00e0ff"
+                            backgroundColor="#3d5875">
+                            {
+                                (fill) => (
+                                    <Text 
+                                        style={{color: 'white', fontWeight: 'bold'}}>
+                                            {leftTime.minutes}:{leftTime.seconds}
+                                    </Text>
+                                )
+                            }
+                        </AnimatedCircularProgress>
+                    </TouchableOpacity>
+                    
+                </View>
+            )
         }
-        return (<View>
-            <AnimatedCircularProgress
-            size={55}
-            width={2}
-            fill={yuzde}
-            tintColor="#00e0ff"
-            onAnimationComplete={() => console.log('onAnimationComplete')}
-            backgroundColor="#3d5875">
-                {
-                    (fill) => (
-                        <Text 
-                            style={{color: 'white', fontWeight: 'bold'}}>
-                                {leftTime.minutes}:{leftTime.seconds}
-                        </Text>
-                    )
-                }
-        </AnimatedCircularProgress>
-        </View>)
+        
     }
 
 }

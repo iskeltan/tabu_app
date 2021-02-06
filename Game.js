@@ -5,6 +5,16 @@ import SwipeCards from './SwipeCards.js';
 import CountDown from './CountDown';
 
 import styles from './Stylesheet';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons'; 
+import {
+    AdMobBanner,
+    AdMobInterstitial,
+    PublisherBanner,
+    AdMobRewarded,
+    setTestDeviceIDAsync,
+  } from 'expo-ads-admob';
+
 
 class Game extends React.Component{
     constructor(props){
@@ -201,13 +211,32 @@ class Game extends React.Component{
             seconds: this.props.seconds,
             playerTeam: this.props.teamFirst,
             limitScore: this.props.limitScore,
-            isPaused: this.props.isPaused
+            isPaused: this.props.isPaused,
+            teamFirstWords: [],
+            teamSecondWords: []
         }
         this.shuffle();
     }
 
+
     handleYup = (card) =>{
+
+        if(this.state.isPaused){
+            return
+        }
+        
         let currentScore = 0;
+
+        let cardsList = this.shuffleList(this.state.cards);
+        let newList = [];
+
+        for(let i = cardsList.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            newList.push(cardsList[i]);
+        }
+
+        this.setState({cards: newList});
+
         if(this.state.playerTeam == this.props.teamFirst){
             this.setState({teamFirstScore: this.state.teamFirstScore + 1})
             currentScore = this.state.teamFirstScore;
@@ -215,14 +244,13 @@ class Game extends React.Component{
             this.setState({teamSecondScore: this.state.teamSecondScore + 1})
             currentScore = this.state.teamSecondScore;
         }
-
-        if(this.state.limitScore <= currentScore){
-            alert("oyun bitti");
+        if(this.state.limitScore <= currentScore+1){
+            //alert("oyun bitti");
             this.setState({isPaused: true});
-            this.props.navigation.navigate("GameEnd", {
+            this.props.navigation.replace("GameEnd", {
                 winnerName: this.state.playerTeam,
-                teamFirst: this.state.teamFirst,
-                teamSecond: this.state.teamSecond,
+                teamFirst: this.props.teamFirst,
+                teamSecond: this.props.teamSecond,
                 teamFirstScore: this.state.teamFirstScore,
                 teamSecondScore: this.state.teamSecondScore,
                 teamFirstPass: this.state.teamFirstPass,
@@ -231,8 +259,22 @@ class Game extends React.Component{
         }
     }
 
-
     handleNope = (card) =>{
+
+        if(this.state.isPaused){
+            return
+        }
+
+        let cardsList = this.shuffleList(this.state.cards);
+        let newList = [];
+
+        for(let i = cardsList.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            newList.push(cardsList[i]);
+        }
+
+        this.setState({cards: newList});
+
         if(this.state.playerTeam == this.props.teamFirst){
             this.setState({teamFirstScore: this.state.teamFirstScore - 1})
         }else{
@@ -241,17 +283,33 @@ class Game extends React.Component{
     }
 
     handleMaybe = (card) =>{
-        let passRight = 0;
+
+        if(this.state.isPaused){
+            return
+        }
+
         if(this.state.playerTeam == this.props.teamFirst){
+            if(this.state.teamFirstPass <= 0){
+                return
+            }
             this.setState({teamFirstPass: this.state.teamFirstPass - 1});
-            passRight = this.state.teamFirstPass - 1;
         }else{
+            if(this.state.teamSecondPass <= 0){
+                return
+            }
             this.setState({teamSecondPass: this.state.teamSecondPass - 1});
-            passRight = this.state.teamSecondPass - 1;
         }
-        if(passRight <= 0){
-            this.setState()
+
+
+        let cardsList = this.shuffleList(this.state.cards);
+        let newList = [];
+
+        for(let i = cardsList.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            newList.push(cardsList[i]);
         }
+
+        this.setState({cards: newList});
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
@@ -274,8 +332,8 @@ class Game extends React.Component{
             cdProp.setState({isPaused: true});
 
             Alert.alert(
-                `${this.state.playerTeam} oyuna baslayacak.`,
-                'hazir oldugunuzda okey babus verin',
+                `${this.state.playerTeam} oyuna başlayacak.`,
+                'hazır oldugunuzda okey babus verin',
                 [
                   {text: 'Okey babus', onPress: () => {
                       this.shuffle();
@@ -304,6 +362,19 @@ class Game extends React.Component{
         this.setState({cards: arr});
     };
 
+    shuffleList = (arr) => {
+        var i,
+            j,
+            temp;
+        for (i = arr.length - 1; i > 0; i--) {
+            j = Math.floor(Math.random() * (i + 1));
+            temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+        return arr;
+    }
+
     maybeActive(){
         if(this.passRight() > 0){
             return true;
@@ -319,6 +390,25 @@ class Game extends React.Component{
         }
     }
 
+    componentWillUnmount(){
+        this.setState({isPaused: true});
+    }
+
+    togglePause = () => {
+        let newVal = !this.state.isPaused;
+        this.setState({isPaused: true});
+        console.log("gamedeki: "+newVal);
+    }
+
+    cards(){
+        return this.shuffleList(this.state.cards);
+    }
+
+    bannerError() {
+        console.log("An error");
+        return;
+      }
+
     render(){
         let score = 0;
         if(this.state.playerTeam == this.props.teamFirst){
@@ -327,16 +417,16 @@ class Game extends React.Component{
             score = this.state.teamSecondScore;
         }
         let maybeActive = this.maybeActive();
-        console.log("GAME: "+ this.props.isPaused);
+
         return (
             <View style={styles.container}>
-                <View style={{flexDirection: 'row', alignItems: 'center', width: 400, justifyContent: "space-between"}}>
-                    <View style={{alignItems: 'center', backgroundColor: '#EE6C4D', width: 20, height: 24, borderBottomRightRadius: 4, borderBottomLeftRadius: 4, width: 40, height: 50}}>
-                        <Text style={{color: "white", fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>
+                <View style={styles.gameHeaderBox}>
+                    <View style={styles.scoreBoardContainer}>
+                        <Text style={styles.scoreBoardText}>
                             {this.state.teamFirstScore}
                         </Text>
-                        <View style={{borderWidth: 0.5, margin: 0, width: '100%', borderColor: 'white' }}></View>
-                        <Text style={{color: "white", fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>
+                        <View style={styles.scoreBoardBorder}></View>
+                        <Text style={styles.scoreBoardText}>
                             {this.state.teamFirstPass}
                         </Text>
                     </View>
@@ -345,12 +435,12 @@ class Game extends React.Component{
                             {this.state.playerTeam} Oynuyor
                         </Text>
                     </View>
-                    <View style={{alignItems: 'center', backgroundColor: '#EE6C4D', width: 20, height: 24, borderBottomRightRadius: 4, borderBottomLeftRadius: 4, width: 40, height: 50}}>
-                        <Text style={{color: "white", fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>
+                    <View style={styles.scoreBoardContainer}>
+                        <Text style={styles.scoreBoardText}>
                             {this.state.teamSecondScore}
                         </Text>
-                        <View style={{borderWidth: 0.5, margin: 0, width: '100%', borderColor: 'white' }}></View>
-                        <Text style={{color: "white", fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>
+                        <View style={styles.scoreBoardBorder}></View>
+                        <Text style={styles.scoreBoardText}>
                             {this.state.teamSecondPass}
                         </Text>
                     </View>
@@ -362,22 +452,47 @@ class Game extends React.Component{
                         seconds={this.state.seconds} 
                         timeEnd={this.timeEnd} 
                         isPaused={this.state.isPaused}
+                        togglePause={this.togglePause}
+                        
                         />
                     </View>
 
-                <View>
+                <View style={styles.swipeCardContainer}>
                     <SwipeCards 
-                    cards={this.state.cards} 
-                    style={{flex: 1}}
-                    handleYup={this.handleYup}
-                    handleNope={this.handleNope}
-                    handleMaybe={this.handleMaybe}
-                    maybeActive={maybeActive}
-                    loop={true}
-                    onLoop={this.shuffle}
-                    touchable={this.props.isPaused}
+                        cards={this.cards()}
+                        handleYup={this.handleYup}
+                        handleNope={this.handleNope}
+                        handleMaybe={this.handleMaybe}
+                        maybeActive={maybeActive}
+                        onLoop={this.shuffle}
+                        touchable={this.props.isPaused}
                     />
+                    <View style={styles.cardBottom}>
+                        <TouchableOpacity style={styles.nopeButton} onPress={this.handleNope}>
+                            <Text style={styles.choiceButtonText}>
+                                <Entypo name="thumbs-down" size={24} color="white" />
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.maybeButton} onPress={this.handleMaybe}>
+                            <Text style={styles.choiceButtonText}>
+                                <MaterialCommunityIcons name="heart-broken" size={24} color="white" />
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.yupButton} onPress={this.handleYup}>
+                            <Text style={styles.choiceButtonText}>
+                                <Entypo name="thumbs-up" size={24} color="white" />
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
+                <View><AdMobBanner
+          style={styles.bottomBanner}
+          bannerSize="fullBanner"
+          adUnitID="ca-app-pub-7006740632293193~4142301085"
+          // Test ID, Replace with your-admob-unit-id
+          testDeviceID="EMULATOR"
+          didFailToReceiveAdWithError={this.bannerError}
+        /></View>
             </View>
         )
     }

@@ -58,15 +58,10 @@ export default class extends React.Component{
         super(props);
     }
 
-    renderNope = () => {
-        return false;
-    }
-
     render(){
         let pointerEvents = this.props.touchable ? 'none':'auto';
-        console.log("CARDDAN: "+pointerEvents);
         return (
-            <View pointerEvents={pointerEvents}>
+            <View pointerEvents={pointerEvents} style={{flex:1}}>
                 <SwipeCards 
                     cards={this.props.cards}
                     renderCard={(cardData) => <Card {...cardData} />}
@@ -75,7 +70,7 @@ export default class extends React.Component{
                     handleNope={this.props.handleNope}
                     handleMaybe={this.props.handleMaybe}
                     hasMaybeAction={this.props.maybeActive}
-                    yupText="Dogru"
+                    yupText="Doğru"
                     nopeText="Tabu"
                     maybeText="Pas"
                     containerStyle={styles.allCards}

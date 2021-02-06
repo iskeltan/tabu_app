@@ -17,8 +17,8 @@ class Home extends React.Component{
   constructor(props){
     super(props)
     this.state = {
-      teamFirst: "Takim 1",
-      teamSecond: "Takim 2",
+      teamFirst: "Takım 1",
+      teamSecond: "Takım 2",
       selectedMinute: 2,
       selectedSeconds: 120,
       limitScore: 20
@@ -32,7 +32,7 @@ class Home extends React.Component{
   render(){
     return (<View>
       <View style={styles.formContainer}>
-        <Text style={styles.formContainerText}>Birinci Takim</Text>
+        <Text style={styles.formContainerText}>Birinci Takım</Text>
         <TextInput 
         placeholder="Birinci Takim" 
         onChangeText={(teamFirst) => this.setState({ teamFirst: teamFirst })}
@@ -41,7 +41,7 @@ class Home extends React.Component{
       </View>
 
       <View style={styles.formContainer}>
-        <Text style={styles.formContainerText}>Ikinci Takim</Text>
+        <Text style={styles.formContainerText}>Ikinci Takım</Text>
         <TextInput 
         placeholder="Ikinci Takim" 
         onChangeText={(teamSecond) => this.setState({ teamSecond: teamSecond })}
@@ -50,7 +50,7 @@ class Home extends React.Component{
       </View>
       <View style={styles.formContainer}>
         <View>
-          <Text style={[styles.formContainerText, {textAlign: "left", position: "absolute"}]}>Kacta biter?</Text>
+          <Text style={[styles.formContainerText, {textAlign: "left", position: "absolute"}]}>Kaçta biter?</Text>
           <Text style={[styles.formContainerText, {textAlign: "right"}]}>{this.state.limitScore}</Text>
         </View>
 
@@ -64,7 +64,7 @@ class Home extends React.Component{
       </View>
 
       <View style={[styles.formContainer, {borderWidth: 2, borderRadius: 15, padding: 15, marginBottom: 10}]}>
-        <Text style={styles.formContainerText}>Sure</Text>
+        <Text style={styles.formContainerText}>Süre</Text>
       <Picker 
         selectedValue={this.state.selectedMinute}
         onValueChange={(value, pos) => this.pickTime(value)}
@@ -86,7 +86,7 @@ class Home extends React.Component{
           limitScore: this.state.limitScore
         })}   
       >
-        <Text style={styles.startButtonText}>Oyuna Basla</Text>
+        <Text style={styles.startButtonText}>Oyuna Başla</Text>
       </TouchableOpacity>
     </View>)
   }
@@ -106,14 +106,14 @@ function GameEndScreen({route, navigation}){
   return (
     <View style={styles.container}>
       <GameEnd 
-        navigation={navigation}
-        winnerName={route.params.playerTeam}
+        winnerName={route.params.winnerName}
         teamFirst={route.params.teamFirst}
         teamSecond={route.params.teamSecond}
         teamFirstScore={route.params.teamFirstScore}
         teamSecondScore={route.params.teamSecondScore}
         teamFirstPass={route.params.teamFirstPass}
         teamSecondPass={route.params.teamSecondPass}
+        navigation={navigation}
       />
     </View>
   )
@@ -133,13 +133,12 @@ function GameScreen({route, navigation}){
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={toggleIsPaused}>
+        <TouchableOpacity onPress={toggleIsPaused} style={{marginRight: 5}}>
            <AntDesign name="playcircleo" size={32} color="white" padding={5} />
         </TouchableOpacity>
       ),
     });
   }, [navigation]);
-  console.log("game screen: "+ isPaused);
   return (
     <View style={styles.container}>
       <Game 
@@ -188,6 +187,7 @@ function App() {
         <Stack.Screen 
           name="GameEnd"
           component={GameEndScreen}
+          initialParams={{teamFirst: "-", teamSecond: "-", isPaused: false}}
           options={{
             title: 'Son',
             headerStyle: styles.headerStyle,
