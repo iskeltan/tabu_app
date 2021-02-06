@@ -7,13 +7,7 @@ import CountDown from './CountDown';
 import styles from './Stylesheet';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons'; 
-import {
-    AdMobBanner,
-    AdMobInterstitial,
-    PublisherBanner,
-    AdMobRewarded,
-    setTestDeviceIDAsync,
-  } from 'expo-ads-admob';
+import {AdMobBanner} from 'expo-ads-admob';
 
 
 class Game extends React.Component{
@@ -212,14 +206,23 @@ class Game extends React.Component{
             playerTeam: this.props.teamFirst,
             limitScore: this.props.limitScore,
             isPaused: this.props.isPaused,
-            teamFirstWords: [],
-            teamSecondWords: []
+            teamFirstWords: {
+                yup: [],
+                nope: [],
+                maybe: []
+            },
+            teamSecondWords: {
+                yup: [],
+                nope: [],
+                maybe: []
+            }
         }
         this.shuffle();
     }
 
 
     handleYup = (card) =>{
+        let activeCard = this.state.cards[0];
 
         if(this.state.isPaused){
             return
@@ -236,23 +239,23 @@ class Game extends React.Component{
         }
 
         this.setState({cards: newList});
-
         if(this.state.playerTeam == this.props.teamFirst){
-            this.setState({teamFirstScore: this.state.teamFirstScore + 1})
-            currentScore = this.state.teamFirstScore;
+            this.setState({teamFirstScore: this.state.teamFirstScore + 1});
+            currentScore = this.state.teamFirstScore+1;
         }else{
-            this.setState({teamSecondScore: this.state.teamSecondScore + 1})
-            currentScore = this.state.teamSecondScore;
+            this.setState({teamSecondScore: this.state.teamSecondScore + 1});
+            currentScore = this.state.teamSecondScore+1;
         }
-        if(this.state.limitScore <= currentScore+1){
-            //alert("oyun bitti");
+        console.log("limit: "+this.state.limitScore);
+        console.log("current: "+currentScore);
+        if(this.state.limitScore <= currentScore){
             this.setState({isPaused: true});
             this.props.navigation.replace("GameEnd", {
                 winnerName: this.state.playerTeam,
                 teamFirst: this.props.teamFirst,
                 teamSecond: this.props.teamSecond,
-                teamFirstScore: this.state.teamFirstScore,
-                teamSecondScore: this.state.teamSecondScore,
+                teamFirstScore: this.state.teamFirstScore+1,
+                teamSecondScore: this.state.teamSecondScore+1,
                 teamFirstPass: this.state.teamFirstPass,
                 teamSecondPass: this.state.teamSecondPass
             });
@@ -265,6 +268,18 @@ class Game extends React.Component{
             return
         }
 
+        if(this.state.playerTeam == this.props.teamFirst){
+            if(this.state.teamFirstScore <= -5){
+                return
+            }
+            this.setState({teamFirstScore: this.state.teamFirstScore - 1})
+        }else{
+            if(this.state.teamSecondScore <= -5){
+                return
+            }
+            this.setState({teamSecondScore: this.state.teamSecondScore - 1})
+        }
+
         let cardsList = this.shuffleList(this.state.cards);
         let newList = [];
 
@@ -274,12 +289,6 @@ class Game extends React.Component{
         }
 
         this.setState({cards: newList});
-
-        if(this.state.playerTeam == this.props.teamFirst){
-            this.setState({teamFirstScore: this.state.teamFirstScore - 1})
-        }else{
-            this.setState({teamSecondScore: this.state.teamSecondScore - 1})
-        }
     }
 
     handleMaybe = (card) =>{
@@ -395,9 +404,8 @@ class Game extends React.Component{
     }
 
     togglePause = () => {
-        let newVal = !this.state.isPaused;
-        this.setState({isPaused: true});
-        console.log("gamedeki: "+newVal);
+        this.setState({isPaused: !this.state.isPaused});
+        console.log("gamedeki "+this.state.isPaused);
     }
 
     cards(){
@@ -465,7 +473,7 @@ class Game extends React.Component{
                         handleMaybe={this.handleMaybe}
                         maybeActive={maybeActive}
                         onLoop={this.shuffle}
-                        touchable={this.props.isPaused}
+                        touchable={this.state.isPaused}
                     />
                     <View style={styles.cardBottom}>
                         <TouchableOpacity style={styles.nopeButton} onPress={this.handleNope}>
@@ -485,14 +493,15 @@ class Game extends React.Component{
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View><AdMobBanner
-          style={styles.bottomBanner}
-          bannerSize="fullBanner"
-          adUnitID="ca-app-pub-7006740632293193~4142301085"
-          // Test ID, Replace with your-admob-unit-id
-          testDeviceID="EMULATOR"
-          didFailToReceiveAdWithError={this.bannerError}
-        /></View>
+                <View>
+                <AdMobBanner
+                style={styles.bottomBanner}
+                bannerSize="fullBanner"
+                adUnitID="ca-app-pub-7006740632293193~4142301085"
+                testDeviceID="EMULATOR"
+                didFailToReceiveAdWithError={this.bannerError}
+                />
+        </View>
             </View>
         )
     }

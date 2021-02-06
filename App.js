@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, TextInput, Picker } from 'react-native';
+import {Text, View, TextInput, Picker, ImageBackground} from 'react-native';
 import Slider from '@react-native-community/slider';
 
 import { NavigationContainer } from '@react-navigation/native';
