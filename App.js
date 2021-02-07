@@ -14,6 +14,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 class Home extends React.Component{
 
+
   constructor(props){
     super(props)
     this.state = {

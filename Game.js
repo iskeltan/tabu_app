@@ -355,11 +355,22 @@ class Game extends React.Component{
                       cdProp.timer = 0;
                       cdProp.setState({isPaused: false});
                       cdProp.startTimer();
+
+                        let cardsList = this.shuffleList(this.state.cards);
+                        let newList = [];
+
+                        for(let i = cardsList.length - 1; i > 0; i--) {
+                            let j = Math.floor(Math.random() * (i + 1));
+                            newList.push(cardsList[i]);
+                        }
+
+                        this.setState({cards: newList}); 
+
                     }}
                 ],
                 { cancelable: false }
               )
-        } 
+        }
     }
 
     shuffle() {
