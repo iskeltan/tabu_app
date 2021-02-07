@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {Text, View} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import SwipeCards from 'react-native-swipe-cards';
 
@@ -13,7 +14,9 @@ class BannedWord extends React.Component{
     render(){
         return (
             <View style={styles.buttonContainer}>
-                <Text style={styles.choice}>{this.props.text}</Text>
+                <LinearGradient colors={['#009688', '#02b09f']}>
+                    <Text style={styles.choice}>{this.props.text}</Text>
+                </LinearGradient>
             </View>
         )
     }
@@ -26,15 +29,15 @@ class Card extends React.Component{
 
     render(){
         return (
-            <View style={styles.card}>
-                <Text style={styles.cardText}>{this.props.text}</Text>
-                {
-                    this.props.bannedWords.map((prop, key) => {
-                        return <BannedWord text={prop} />;
-                    })
-                }
+            <LinearGradient colors={['#9dd0d1', '#badfe0', '#E0FBFC']} style={styles.card}>
                 
-            </View>
+                    <Text style={styles.cardText}>{this.props.text}</Text>
+                    {
+                        this.props.bannedWords.map((prop, key) => {
+                            return <BannedWord text={prop} />;
+                        })
+                    }
+            </LinearGradient>
         )
     }
 }

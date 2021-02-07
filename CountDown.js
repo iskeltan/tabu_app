@@ -11,7 +11,8 @@ class CountDown extends React.Component{
         this.state = {
             time: {}, 
             seconds: this.props.seconds, 
-            isPaused: this.props.isPaused
+            isPaused: this.props.isPaused,
+            originalSeconds: this.props.seconds
         }
         this.timer = 0;
         this.startTimer = this.startTimer.bind(this);
@@ -72,13 +73,12 @@ class CountDown extends React.Component{
     
     togglePause = () => {
         this.setState({isPaused: !this.state.isPaused});
-        console.log("cddeki "+this.state.isPaused);
         this.props.togglePause();
     }
 
     render(){
         let leftTime = this.secondsToTime(this.state.seconds);
-        let _percent = 100 * this.state.seconds / this.props.seconds;
+        let _percent = 100 * this.state.seconds / this.state.originalSeconds;
         if(_percent <= 0){
             _percent = 100;
         }

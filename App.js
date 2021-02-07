@@ -1,10 +1,10 @@
 import React from 'react';
-import {Text, View, TextInput, Picker, ImageBackground} from 'react-native';
+import {Text, View, TextInput, Picker, Switch, ImageBackground} from 'react-native';
 import Slider from '@react-native-community/slider';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { AntDesign } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import Game from './Game.js';
 import GameEnd from './GameEnd';
@@ -21,7 +21,8 @@ class Home extends React.Component{
       teamSecond: "Takım 2",
       selectedMinute: 2,
       selectedSeconds: 120,
-      limitScore: 20
+      limitScore: 20,
+      scoreBonus: true
     }
   }
 
@@ -29,10 +30,14 @@ class Home extends React.Component{
     this.setState({selectedMinute: val, selectedSeconds: parseInt(val) * 60})
   }
 
+  scoreBonusValueChange = () =>{
+    this.setState({scoreBonus: !this.state.scoreBonus});
+  }
+
   render(){
-    return (<View>
+    return (
+    <LinearGradient colors={['#4c669f', '#3b5998', '#192f6a']} style={{width: '100%', height: '100%', padding: 5, alignItems: 'center'}}>
       <View style={styles.formContainer}>
-        <Text style={styles.formContainerText}>Birinci Takım</Text>
         <TextInput 
         placeholder="Birinci Takim" 
         onChangeText={(teamFirst) => this.setState({ teamFirst: teamFirst })}
@@ -41,7 +46,6 @@ class Home extends React.Component{
       </View>
 
       <View style={styles.formContainer}>
-        <Text style={styles.formContainerText}>Ikinci Takım</Text>
         <TextInput 
         placeholder="Ikinci Takim" 
         onChangeText={(teamSecond) => this.setState({ teamSecond: teamSecond })}
@@ -83,12 +87,25 @@ class Home extends React.Component{
           teamSecond: this.state.teamSecond,
           selectedSeconds: this.state.selectedSeconds,
           isPaused: false,
-          limitScore: this.state.limitScore
+          limitScore: this.state.limitScore,
+          scoreBonus: this.state.scoreBonus
         })}   
       >
         <Text style={styles.startButtonText}>Oyuna Başla</Text>
       </TouchableOpacity>
-    </View>)
+      
+      <View style={styles.formContainer}>
+        <View>
+          <Text style={[styles.formContainerText, {marginBottom: 10}]}>Skor Bonusu</Text>
+        </View>
+        
+        <Switch 
+          value={this.state.scoreBonus} 
+          onValueChange={this.scoreBonusValueChange} 
+        />
+      </View>
+    </LinearGradient>
+    )
   }
 
 }
@@ -130,15 +147,15 @@ function useToggle(initialValue) {
 function GameScreen({route, navigation}){
   const [isPaused, toggleIsPaused] = useToggle(false);
 
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity onPress={toggleIsPaused} style={{marginRight: 5}}>
-           <AntDesign name="playcircleo" size={32} color="white" padding={5} />
-        </TouchableOpacity>
-      ),
-    });
-  }, [navigation]);
+  // React.useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerRight: () => (
+  //       <TouchableOpacity onPress={toggleIsPaused} style={{marginRight: 5}}>
+  //          <AntDesign name="playcircleo" size={32} color="white" padding={5} />
+  //       </TouchableOpacity>
+  //     ),
+  //   });
+  // }, [navigation]);
   return (
     <View style={styles.container}>
       <Game 
@@ -148,6 +165,7 @@ function GameScreen({route, navigation}){
         isPaused={isPaused}
         limitScore={route.params.limitScore}
         navigation={navigation}
+        scoreBonus={route.params.scoreBonus}
       />
     </View>
   );

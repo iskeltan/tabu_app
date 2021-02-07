@@ -8,6 +8,7 @@ import styles from './Stylesheet';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons'; 
 import {AdMobBanner} from 'expo-ads-admob';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 class Game extends React.Component{
@@ -205,7 +206,8 @@ class Game extends React.Component{
             seconds: this.props.seconds,
             playerTeam: this.props.teamFirst,
             limitScore: this.props.limitScore,
-            isPaused: this.props.isPaused,
+            scoreBonus: this.props.scoreBonus,
+            isPaused: false,
             teamFirstWords: {
                 yup: [],
                 nope: [],
@@ -240,14 +242,12 @@ class Game extends React.Component{
 
         this.setState({cards: newList});
         if(this.state.playerTeam == this.props.teamFirst){
-            this.setState({teamFirstScore: this.state.teamFirstScore + 1});
+            this.setState({teamFirstScore: this.state.teamFirstScore + 1});  
             currentScore = this.state.teamFirstScore+1;
         }else{
             this.setState({teamSecondScore: this.state.teamSecondScore + 1});
             currentScore = this.state.teamSecondScore+1;
         }
-        console.log("limit: "+this.state.limitScore);
-        console.log("current: "+currentScore);
         if(this.state.limitScore <= currentScore){
             this.setState({isPaused: true});
             this.props.navigation.replace("GameEnd", {
@@ -267,14 +267,19 @@ class Game extends React.Component{
         if(this.state.isPaused){
             return
         }
+        
+        let endScore = 0;
+        if(this.state.scoreBonus){
+            endScore = -5;
+        }
 
         if(this.state.playerTeam == this.props.teamFirst){
-            if(this.state.teamFirstScore <= -5){
+            if(this.state.teamFirstScore <= endScore){
                 return
             }
             this.setState({teamFirstScore: this.state.teamFirstScore - 1})
         }else{
-            if(this.state.teamSecondScore <= -5){
+            if(this.state.teamSecondScore <= endScore){
                 return
             }
             this.setState({teamSecondScore: this.state.teamSecondScore - 1})
@@ -322,14 +327,15 @@ class Game extends React.Component{
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
-        if (nextProps.isPaused !== prevState.isPaused) {
-          return ({ isPaused: nextProps.isPaused }) // <- this is setState equivalent
-        }
+        //if (nextProps.isPaused !== prevState.isPaused) {
+        //  return ({ isPaused: nextProps.isPaused }) // <- this is setState equivalent
+        //}
         return null
       }
     
 
     timeEnd = (cdProp) => {
+        this.setState({seconds: this.props.seconds});
         if(this.state.playerTeam == this.props.teamFirst){
             this.setState({playerTeam: this.props.teamSecond})
         }else{
@@ -339,7 +345,6 @@ class Game extends React.Component{
             return null;
         }else{
             cdProp.setState({isPaused: true});
-
             Alert.alert(
                 `${this.state.playerTeam} oyuna başlayacak.`,
                 'hazır oldugunuzda okey babus verin',
@@ -405,7 +410,7 @@ class Game extends React.Component{
 
     togglePause = () => {
         this.setState({isPaused: !this.state.isPaused});
-        console.log("gamedeki "+this.state.isPaused);
+        console.log("gamedeki "+!this.state.isPaused);
     }
 
     cards(){
@@ -427,16 +432,16 @@ class Game extends React.Component{
         let maybeActive = this.maybeActive();
 
         return (
-            <View style={styles.container}>
+            <LinearGradient style={styles.container} colors={['#4c669f', '#3b5998', '#192f6a']}>
                 <View style={styles.gameHeaderBox}>
                     <View style={styles.scoreBoardContainer}>
-                        <Text style={styles.scoreBoardText}>
-                            {this.state.teamFirstScore}
-                        </Text>
-                        <View style={styles.scoreBoardBorder}></View>
-                        <Text style={styles.scoreBoardText}>
-                            {this.state.teamFirstPass}
-                        </Text>
+                            <Text style={styles.scoreBoardText}>
+                                {this.state.teamFirstScore}
+                            </Text>
+                            <View style={styles.scoreBoardBorder}></View>
+                            <Text style={styles.scoreBoardText}>
+                                {this.state.teamFirstPass}
+                            </Text>
                     </View>
                     <View style={{alignItems: 'center'}}>
                         <Text style={styles.playerText}>
@@ -455,7 +460,7 @@ class Game extends React.Component{
 
                 </View>
 
-                <View style={{alignItems: 'flex-start', alignContent: 'flex-start'}}>
+                <View style={styles.countDown}>
                         <CountDown 
                         seconds={this.state.seconds} 
                         timeEnd={this.timeEnd} 
@@ -476,21 +481,27 @@ class Game extends React.Component{
                         touchable={this.state.isPaused}
                     />
                     <View style={styles.cardBottom}>
-                        <TouchableOpacity style={styles.nopeButton} onPress={this.handleNope}>
+                    <LinearGradient style={styles.nopeButton} colors={['#FF4B2B', '#FF416C']}>
+                        <TouchableOpacity onPress={this.handleNope}>
                             <Text style={styles.choiceButtonText}>
                                 <Entypo name="thumbs-down" size={24} color="white" />
                             </Text>
                         </TouchableOpacity>
+                    </LinearGradient>
+                    <LinearGradient style={styles.maybeButton} colors={['#667db6', '#0082c8', '#667db6']}>
                         <TouchableOpacity style={styles.maybeButton} onPress={this.handleMaybe}>
                             <Text style={styles.choiceButtonText}>
                                 <MaterialCommunityIcons name="heart-broken" size={24} color="white" />
                             </Text>
                         </TouchableOpacity>
+                    </LinearGradient>
+                    <LinearGradient style={styles.maybeButton} colors={['#38ef7d', '#12cc85']}>
                         <TouchableOpacity style={styles.yupButton} onPress={this.handleYup}>
                             <Text style={styles.choiceButtonText}>
                                 <Entypo name="thumbs-up" size={24} color="white" />
                             </Text>
                         </TouchableOpacity>
+                    </LinearGradient>
                     </View>
                 </View>
                 <View>
@@ -502,7 +513,7 @@ class Game extends React.Component{
                 didFailToReceiveAdWithError={this.bannerError}
                 />
         </View>
-            </View>
+            </LinearGradient>
         )
     }
 }

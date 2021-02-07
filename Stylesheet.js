@@ -48,7 +48,8 @@ export default StyleSheet.create({
     borderColor: 'white'
   },
   formContainer: {
-    marginTop: 10
+    marginTop: 10,
+    width: windowWidth - 10
   },
   formContainerText: {
     color: colorLight2
@@ -65,7 +66,9 @@ export default StyleSheet.create({
     textAlign: "center",
     borderRadius: 15,
     width: windowWidth * 0.9,
-    marginBottom: 10
+    marginBottom: 10,
+    alignItems: 'center',
+    alignContent: 'center'
   },
   startButton: {
     backgroundColor: colorColored,
@@ -116,7 +119,9 @@ export default StyleSheet.create({
   },
   startButtonText: {
     color: "#fff",
-    fontSize: 0.04*windowWidth
+    fontSize: 0.04*windowWidth,
+    width: windowWidth * 0.70,
+    textAlign: 'center'
   },
     headerStyle: {
       backgroundColor: colorColored,
@@ -128,35 +133,30 @@ export default StyleSheet.create({
         justifyContent: 'flex-start',
     },
     allCards: {},
+    countDown: {
+      height: windowHeight * 0.12
+    },
     cardBottom: {
       flex: 0.8,
       width: windowWidth - 20,
       flexDirection: 'row',
       justifyContent: 'space-between',
+      marginTop: windowHeight * 0.05
     },
     nopeButton: {
-        borderColor: 'red',
-        backgroundColor: '#F04222',
-        borderWidth: 2,
-        borderRadius: 250,
+        borderRadius: 10,
         width: windowWidth * 0.25,
         height: windowHeight * 0.075,
         justifyContent: 'center'
     },
     yupButton: {
-        borderColor: 'green',
-        backgroundColor: '#009971',
-        borderWidth: 2,
-        borderRadius: 250,
+        borderRadius: 10,
         width: windowWidth * 0.25,
         height: windowHeight * 0.075,
         justifyContent: 'center'
     },
     maybeButton: {
-        borderColor: '#0E3285',
-        backgroundColor: '#0E3285',
-        borderWidth: 2,
-        borderRadius: 250,
+        borderRadius: 10,
         width: windowWidth * 0.25,
         height: windowHeight * 0.075,
         justifyContent: 'center'
@@ -173,7 +173,7 @@ export default StyleSheet.create({
       alignItems: 'center',
       width: windowWidth / 1.5,
       height: windowHeight / 2.6,
-      borderWidth: 5,
+      borderWidth: 2,
       backgroundColor: colorLight,
       borderColor: colorDark2,
       borderRadius: 15
@@ -197,7 +197,8 @@ export default StyleSheet.create({
         borderRadius: 10,
         width: windowWidth / 3,
         height: windowHeight / 30,
-        marginBottom: 5
+        marginBottom: 5,
+        //marginTop: 10
       },
       yupStyle: { 
         borderColor: 'green',
