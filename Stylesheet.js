@@ -123,116 +123,116 @@ export default StyleSheet.create({
     width: windowWidth * 0.70,
     textAlign: 'center'
   },
-    headerStyle: {
-      backgroundColor: colorColored,
-    },
-    container: {
-        flex: 1,
-        backgroundColor: colorDark2,
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-    },
-    allCards: {},
-    countDown: {
-      height: windowHeight * 0.12
-    },
-    cardBottom: {
-      flex: 0.8,
-      width: windowWidth - 20,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      marginTop: windowHeight * 0.05
-    },
-    nopeButton: {
-        borderRadius: 10,
-        width: windowWidth * 0.25,
-        height: windowHeight * 0.075,
-        justifyContent: 'center'
-    },
-    yupButton: {
-        borderRadius: 10,
-        width: windowWidth * 0.25,
-        height: windowHeight * 0.075,
-        justifyContent: 'center'
-    },
-    maybeButton: {
-        borderRadius: 10,
-        width: windowWidth * 0.25,
-        height: windowHeight * 0.075,
-        justifyContent: 'center'
-    },
-    choiceButtonText: {
-      alignContent: 'center', 
-      justifyContent: 'center', 
-      textAlign: 'center', 
-      color: 'white', 
-      fontWeight: 'bold'
-    },
-    card: {
-      justifyContent: 'center',
+  headerStyle: {
+    backgroundColor: colorColored,
+  },
+  container: {
+      flex: 1,
+      backgroundColor: colorDark2,
       alignItems: 'center',
-      width: windowWidth / 1.5,
-      height: windowHeight / 2.6,
-      borderWidth: 2,
-      backgroundColor: colorLight,
-      borderColor: colorDark2,
-      borderRadius: 15
-    },
-    noMoreCardsText: {
-      fontSize: 20,
-    },
-    cardText: {
-        fontSize: 0.08*windowWidth,
+      justifyContent: 'flex-start',
+  },
+  allCards: {},
+  countDown: {
+    height: windowHeight * 0.12
+  },
+  cardBottom: {
+    flex: 0.8,
+    width: windowWidth - 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: windowHeight * 0.05
+  },
+  nopeButton: {
+      borderRadius: 10,
+      width: windowWidth * 0.25,
+      height: windowHeight * 0.075,
+      justifyContent: 'center'
+  },
+  yupButton: {
+      borderRadius: 10,
+      width: windowWidth * 0.25,
+      height: windowHeight * 0.075,
+      justifyContent: 'center'
+  },
+  maybeButton: {
+      borderRadius: 10,
+      width: windowWidth * 0.25,
+      height: windowHeight * 0.075,
+      justifyContent: 'center'
+  },
+  choiceButtonText: {
+    alignContent: 'center', 
+    justifyContent: 'center', 
+    textAlign: 'center', 
+    color: 'white', 
+    fontWeight: 'bold'
+  },
+  card: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: windowWidth / 1.5,
+    height: windowHeight / 2.6,
+    borderWidth: 2,
+    backgroundColor: colorLight,
+    borderColor: colorDark2,
+    borderRadius: 15
+  },
+  noMoreCardsText: {
+    fontSize: 20,
+  },
+  cardText: {
+      fontSize: 0.08*windowWidth,
 
+  },
+  choice: {
+      fontSize: 0.045*windowWidth,
+      color: "#fff",
+      fontWeight: "bold",
+      alignSelf: "center",
+      textTransform: "uppercase"
+  },
+  buttonContainer: {
+      backgroundColor: colorGreen,
+      borderRadius: 10,
+      width: windowWidth / 3,
+      height: windowHeight / 30,
+      marginBottom: 5,
+      //marginTop: 10
     },
-    choice: {
-        fontSize: 0.045*windowWidth,
-        color: "#fff",
-        fontWeight: "bold",
-        alignSelf: "center",
-        textTransform: "uppercase"
+    yupStyle: { 
+      borderColor: 'green',
+      backgroundColor: 'green',
+      borderWidth: 2,
+      position: 'absolute',
+      padding: 20,
+      bottom: 250,
+      borderRadius: 250,
+      right: 0,
     },
-    buttonContainer: {
-        backgroundColor: colorGreen,
-        borderRadius: 10,
-        width: windowWidth / 3,
-        height: windowHeight / 30,
-        marginBottom: 5,
-        //marginTop: 10
-      },
-      yupStyle: { 
-        borderColor: 'green',
-        backgroundColor: 'green',
-        borderWidth: 2,
-        position: 'absolute',
-        padding: 20,
-        bottom: 250,
-        borderRadius: 250,
-        right: 0,
-      },
-      nopeStyle: {
-        borderColor: 'red',
-        backgroundColor: 'red',
-        borderWidth: 2,
-        position: 'absolute',
-        padding: 20,
-        bottom: 250,
-        borderRadius: 250,
-        left: 0,
-      },
-      text: {
-          color: 'white'
-      },
-      maybeStyle: {
-        borderColor: 'blue',
-        backgroundColor: 'blue',
-        borderWidth: 2,
-        position: 'absolute',
-        bottom: 250,
-        borderRadius: 250,
-        textAlign: 'center',
-        justifyContent: 'center',
-        right: 100
-      }
+    nopeStyle: {
+      borderColor: 'red',
+      backgroundColor: 'red',
+      borderWidth: 2,
+      position: 'absolute',
+      padding: 20,
+      bottom: 250,
+      borderRadius: 250,
+      left: 0,
+    },
+    text: {
+        color: 'white'
+    },
+    maybeStyle: {
+      borderColor: 'blue',
+      backgroundColor: 'blue',
+      borderWidth: 2,
+      position: 'absolute',
+      bottom: 250,
+      borderRadius: 250,
+      textAlign: 'center',
+      justifyContent: 'center',
+      right: 100
+    }
   })
   

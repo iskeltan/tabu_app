@@ -208,16 +208,8 @@ class Game extends React.Component{
             limitScore: this.props.limitScore,
             scoreBonus: this.props.scoreBonus,
             isPaused: false,
-            teamFirstWords: {
-                yup: [],
-                nope: [],
-                maybe: []
-            },
-            teamSecondWords: {
-                yup: [],
-                nope: [],
-                maybe: []
-            }
+            teamFirstWords: [],
+            teamSecondWords: []
         }
         this.shuffle();
     }
@@ -225,6 +217,7 @@ class Game extends React.Component{
 
     handleYup = (card) =>{
         let activeCard = this.state.cards[0];
+        activeCard.eventType = "yup";
 
         if(this.state.isPaused){
             return
@@ -244,9 +237,16 @@ class Game extends React.Component{
         if(this.state.playerTeam == this.props.teamFirst){
             this.setState({teamFirstScore: this.state.teamFirstScore + 1});  
             currentScore = this.state.teamFirstScore+1;
+            
+            let teamfirstWords = this.state.teamFirstWords;
+            teamfirstWords.push(activeCard);
+            console.log(teamfirstWords);
         }else{
             this.setState({teamSecondScore: this.state.teamSecondScore + 1});
             currentScore = this.state.teamSecondScore+1;
+
+            let teamSecondWords = this.state.teamSecondWords;
+            teamSecondWords.yup.push(activeCard);
         }
         if(this.state.limitScore <= currentScore){
             this.setState({isPaused: true});
@@ -257,12 +257,16 @@ class Game extends React.Component{
                 teamFirstScore: this.state.teamFirstScore+1,
                 teamSecondScore: this.state.teamSecondScore+1,
                 teamFirstPass: this.state.teamFirstPass,
-                teamSecondPass: this.state.teamSecondPass
+                teamSecondPass: this.state.teamSecondPass,
+                teamFirstWords: this.state.teamFirstWords,
+                teamSecondWords: this.state.teamSecondWords
             });
         }
     }
 
     handleNope = (card) =>{
+        let activeCard = this.state.cards[0];
+        activeCard.eventType = "nope";
 
         if(this.state.isPaused){
             return
@@ -278,11 +282,19 @@ class Game extends React.Component{
                 return
             }
             this.setState({teamFirstScore: this.state.teamFirstScore - 1})
+
+            let teamfirstWords = this.state.teamfirstWords;
+            teamfirstWords.nope.push(activeCard);
+
         }else{
             if(this.state.teamSecondScore <= endScore){
                 return
             }
             this.setState({teamSecondScore: this.state.teamSecondScore - 1})
+
+            let teamSecondWords = this.state.teamSecondWords;
+            teamSecondWords.nope.push(activeCard);
+
         }
 
         let cardsList = this.shuffleList(this.state.cards);
@@ -297,6 +309,8 @@ class Game extends React.Component{
     }
 
     handleMaybe = (card) =>{
+        let activeCard = this.state.cards[0];
+        activeCard.eventType = "maybe";
 
         if(this.state.isPaused){
             return
@@ -307,11 +321,18 @@ class Game extends React.Component{
                 return
             }
             this.setState({teamFirstPass: this.state.teamFirstPass - 1});
+
+            let teamfirstWords = this.state.teamfirstWords;
+            teamfirstWords.maybe.push(activeCard);
+
         }else{
             if(this.state.teamSecondPass <= 0){
                 return
             }
             this.setState({teamSecondPass: this.state.teamSecondPass - 1});
+
+            let teamSecondWords = this.state.teamSecondWords;
+            teamSecondWords.maybe.push(activeCard);
         }
 
 
@@ -325,14 +346,6 @@ class Game extends React.Component{
 
         this.setState({cards: newList});
     }
-
-    static getDerivedStateFromProps(nextProps, prevState) {
-        //if (nextProps.isPaused !== prevState.isPaused) {
-        //  return ({ isPaused: nextProps.isPaused }) // <- this is setState equivalent
-        //}
-        return null
-      }
-    
 
     timeEnd = (cdProp) => {
         this.setState({seconds: this.props.seconds});
