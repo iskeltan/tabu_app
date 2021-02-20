@@ -111,6 +111,21 @@ export default StyleSheet.create({
     paddingRight: 16,
     padding: 10
   },
+  endTeam: {
+    //borderWidth: 1,
+    backgroundColor: colorDark,
+    height: 0.2*windowHeight,
+    width: 0.9*windowWidth,
+    borderRadius: 0.02 * windowWidth,
+    shadowOffset: {
+      width: 0,
+      height: 1
+    },
+    shadowOpacity: 0.35,
+    shadowRadius: 5,
+    margin: 5,
+    padding: 5
+  },
   endText: {
     color: colorLight2,
     fontWeight: "bold",
@@ -233,6 +248,18 @@ export default StyleSheet.create({
       textAlign: 'center',
       justifyContent: 'center',
       right: 100
+    },
+    pastWords: {
+      borderWidth: 1,
+      color: "white", 
+      width: 0.7*windowWidth,
+      height: 100,
+      justifyContent: 'center',
+      alignItems: 'center',
+      textAlign: 'center'
+    },
+    pastWordsText: {
+      color: colorLight
     }
   })
   

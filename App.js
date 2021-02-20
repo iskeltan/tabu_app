@@ -131,6 +131,8 @@ function GameEndScreen({route, navigation}){
         teamSecondScore={route.params.teamSecondScore}
         teamFirstPass={route.params.teamFirstPass}
         teamSecondPass={route.params.teamSecondPass}
+        teamFirstWords={route.params.teamFirstWords}
+        teamSecondWords={route.params.teamSecondWords}
         navigation={navigation}
       />
     </View>

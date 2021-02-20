@@ -240,13 +240,12 @@ class Game extends React.Component{
             
             let teamfirstWords = this.state.teamFirstWords;
             teamfirstWords.push(activeCard);
-            console.log(teamfirstWords);
         }else{
             this.setState({teamSecondScore: this.state.teamSecondScore + 1});
             currentScore = this.state.teamSecondScore+1;
 
             let teamSecondWords = this.state.teamSecondWords;
-            teamSecondWords.yup.push(activeCard);
+            teamSecondWords.push(activeCard);
         }
         if(this.state.limitScore <= currentScore){
             this.setState({isPaused: true});
@@ -283,8 +282,10 @@ class Game extends React.Component{
             }
             this.setState({teamFirstScore: this.state.teamFirstScore - 1})
 
-            let teamfirstWords = this.state.teamfirstWords;
-            teamfirstWords.nope.push(activeCard);
+            if(activeCard){
+                let teamfirstWords = this.state.teamFirstWords;
+                teamfirstWords.push(activeCard);
+            }
 
         }else{
             if(this.state.teamSecondScore <= endScore){
@@ -292,8 +293,10 @@ class Game extends React.Component{
             }
             this.setState({teamSecondScore: this.state.teamSecondScore - 1})
 
-            let teamSecondWords = this.state.teamSecondWords;
-            teamSecondWords.nope.push(activeCard);
+            if(activeCard){
+                let teamSecondWords = this.state.teamSecondWords;
+                teamSecondWords.push(activeCard);
+            }
 
         }
 
@@ -321,18 +324,23 @@ class Game extends React.Component{
                 return
             }
             this.setState({teamFirstPass: this.state.teamFirstPass - 1});
-
-            let teamfirstWords = this.state.teamfirstWords;
-            teamfirstWords.maybe.push(activeCard);
+            if(activeCard){
+                let teamfirstWords = this.state.teamFirstWords;
+                teamfirstWords.push(activeCard);
+            }
+            
 
         }else{
             if(this.state.teamSecondPass <= 0){
                 return
             }
             this.setState({teamSecondPass: this.state.teamSecondPass - 1});
-
-            let teamSecondWords = this.state.teamSecondWords;
-            teamSecondWords.maybe.push(activeCard);
+            
+            if(activeCard){
+                let teamSecondWords = this.state.teamSecondWords;
+                teamSecondWords.push(activeCard);
+            }
+            
         }
 
 
@@ -434,7 +442,6 @@ class Game extends React.Component{
 
     togglePause = () => {
         this.setState({isPaused: !this.state.isPaused});
-        console.log("gamedeki "+!this.state.isPaused);
     }
 
     cards(){
