@@ -513,7 +513,7 @@ class Game extends React.Component{
                     />
                     <View style={styles.cardBottom}>
                     <LinearGradient style={styles.nopeButton} colors={['#FF4B2B', '#FF416C']}>
-                        <TouchableOpacity onPress={this.handleNope}>
+                        <TouchableOpacity style={styles.nopeButton} onPress={this.handleNope}>
                             <Text style={styles.choiceButtonText}>
                                 <Entypo name="thumbs-down" size={24} color="white" />
                             </Text>
