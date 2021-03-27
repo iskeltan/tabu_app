@@ -770,9 +770,11 @@ class Game extends React.Component{
     timeEnd = (cdProp) => {
         this.setState({seconds: this.props.seconds});
         if(this.state.playerTeam == this.props.teamFirst){
-            this.setState({playerTeam: this.props.teamSecond})
+            this.setState({playerTeam: this.props.teamSecond});
+            this.setState({teamSecondPass: 3});
         }else{
-            this.setState({playerTeam: this.props.teamFirst})
+            this.setState({playerTeam: this.props.teamFirst});
+            this.setState({teamFirstPass: 3});
         }
         if(this.state.isPaused){
             return null;
